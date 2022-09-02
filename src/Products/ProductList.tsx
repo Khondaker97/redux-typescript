@@ -1,9 +1,19 @@
 import React, { FC } from "react";
+import { useSelector } from "react-redux";
+import { productSelector } from "../state/Product.slice";
 
-type Props = {};
+const ProductList: FC = () => {
+  const products = useSelector(productSelector);
 
-const ProductList: FC = (props: Props) => {
-  return <div>ProductList</div>;
+  return (
+    <div>
+      <h2>Game List</h2>
+      {products.map((product) => (
+        <div key={product.id}>
+          <span>{`${product.title} : $ ${product.price}`}</span>
+        </div>
+      ))}
+    </div>
+  );
 };
-
 export default ProductList;

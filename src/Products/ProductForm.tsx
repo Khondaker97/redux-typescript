@@ -1,18 +1,20 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { Product } from "../state/Product.slice";
+import { useAppDispatch } from "../hooks/store/store.hooks";
+import { addProduct, Product } from "../state/Product.slice";
 
 const initialValues = {
   title: "",
   price: 0,
   id: "",
 };
-
 const ProductForm = () => {
-  const [addProduct, setAddProduct] = useState<Product>(initialValues);
+  const dispatch = useAppDispatch();
+  const [product, setProduct] = useState<Product>(initialValues);
+
   const handleChange = ({
     target: { name, value },
   }: ChangeEvent<HTMLInputElement>) => {
-    setAddProduct((prev) => {
+    setProduct((prev) => {
       (prev as any)[name] = value;
       const newValue = { ...prev };
       return newValue;
@@ -20,7 +22,12 @@ const ProductForm = () => {
   };
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(addProduct);
+    dispatch(addProduct(product));
+    setProduct({
+      title: "",
+      price: 0,
+      id: "",
+    });
   };
   return (
     <div>
@@ -30,21 +37,21 @@ const ProductForm = () => {
           type="text"
           name="title"
           placeholder="Title"
-          value={addProduct.title}
+          value={product.title}
           onChange={handleChange}
         />
         <input
-          type="text"
+          type="number"
           name="price"
           placeholder="Price"
-          value={addProduct.price}
+          value={product.price}
           onChange={handleChange}
         />
         <input
           type="text"
           name="id"
           placeholder="Id"
-          value={addProduct.id}
+          value={product.id}
           onChange={handleChange}
         />
         <button type="submit">Add Game</button>
